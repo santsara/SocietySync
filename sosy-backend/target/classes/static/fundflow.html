@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>SocietySync - Fund Flow</title>
+    <style>
+        /* Reset */
+        *
+        {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body
+        {
+            background: linear-gradient(135deg, #FFF0D3, #FFF9EE);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Banner */
+        .banner 
+        {
+            position: relative;
+            background-color: #4d2822;
+            color: #FFF9EE;
+            text-align: center;
+            padding: 30px 20px;
+            width: 100%;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .banner-icon
+        { 
+            position: absolute; 
+            left: 20px; 
+            top: 50%; 
+            transform: translateY(-50%); 
+            width: 75px; 
+            height: 75px; 
+        }        
+
+        .banner h1
+        {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .banner p
+        {
+            font-size: 16px;
+            color: #FFF9EE;
+        }
+
+        /* Dashboard Container */
+        .dashboard
+        {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 30px;
+            padding: 40px 20px;
+            width: 100%;
+            max-width: 900px;
+        }
+
+        /* Feature Card */
+        .feature
+        {
+            background: #fff9ee;
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            padding: 30px 20px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .feature:hover 
+        {
+            transform: translateY(-5px);
+        }
+
+        .circle-icon
+        {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 15px;
+            border-radius: 50%;
+            background-color: #4d2822;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #FFF9EE;
+            font-size: 32px;
+            box-shadow: 0 4px 10px rgba(160, 82, 82, 0.3);
+        }   
+
+        .feature h3
+        {
+            font-size: 18px;
+            color: #4d2822;
+            margin-bottom: 10px;
+        }
+
+        .feature p
+        {
+            font-size: 14px;
+            color: #555;
+        }
+
+        /* Responsive */
+        @media (max-width: 480px)
+        {
+            .banner h1
+            {
+                font-size: 26px;
+            }
+            .dashboard
+            {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        a.feature
+        {
+            text-decoration: none;
+        }
+
+        a, a:visited, a:hover, a:active
+        {
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Banner --> 
+    <header class="banner"> 
+        <img src="\Images\Home.png" alt="Go Home Icon" class="banner-icon" /> 
+        <h1 class="banner-title">Fund Flow</h1> 
+        <a href="homepage.html">
+            <img src="\Images\Home.png" alt="Go Home Icon" style="position: absolute; left: 20px; top: 50%; transform: translateY(-50%); width: 75px; height: 75px;">
+        </a>
+    </header> 
+
+    <div class="dashboard">
+        <a href="ff_fundBalance.html" class="feature">
+            <div class="circle-icon">₹</div>
+            <h3>Fund Balance</h3>
+            <p>Check current society fund balance</p>
+        </a>
+        <a href="ff_festivalBudget.html" class="feature">
+            <div class="circle-icon">🎉</div>
+            <h3>Festival Budget</h3>
+            <p>Track expenses and budgets for each festival</p>
+        </a>
+        <a href="ff_defaulters.html" class="feature">
+            <div class="circle-icon">⚠️</div>
+            <h3>Defaulters</h3>
+            <p>See residents with pending maintenance dues</p>
+        </a>
+    </div>
+    <script>
+        // Wait for DOM ready to ensure all elements are loaded
+        document.addEventListener("DOMContentLoaded", function() {
+        });
+    </script>
+</body>
+</html>

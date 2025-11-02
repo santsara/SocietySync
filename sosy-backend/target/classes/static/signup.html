@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Society Sync - Sign Up</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<style>
+    /* General Reset */
+    *
+    {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    /* Background */
+    body
+    {
+        background: linear-gradient(135deg, #FFF0D3, #FFF9EE); /* updated colors */
+        height: 100vh;
+        background-attachment: fixed;
+        display: flex;
+        justify-content: center;
+        padding-top: 50;
+        padding-bottom: 50px;
+        box-sizing: border-box;
+    }
+
+    /* Container */
+    .signup-container
+    {
+        width: 100%;
+        max-width: 450px;
+        padding: 20px;
+    }
+
+    /* Form Box */
+    .form-box
+    {
+        background: #FFF9EE; /* updated background */
+        padding: 30px;
+        border-radius: 20px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        text-align: center;
+    }
+
+    /* Title & Subtitle */
+    .title
+    {
+        font-size: 26px;
+        font-weight: bold;
+        color: #4d2822;
+        margin-bottom: 5px;
+    }
+
+    .subtitle
+    {
+        font-size: 14px;
+        color: #4d2822;
+        margin-bottom: 20px;
+    }
+
+    /* Input Fields */
+    .input-group
+    {
+        text-align: left;
+        margin-bottom: 15px;
+    }
+
+    .input-group label
+    {
+        font-size: 14px;
+        color: #4d2822;
+        margin-bottom: 5px;
+        display: block;
+    }
+
+    .input-group input, .input-group textarea
+    {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 12px;
+        font-size: 14px;
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .input-group input:focus, .input-group textarea:focus
+    {
+        border-color: #a05252;
+        box-shadow: 0 0 5px rgba(160, 82, 82, 0.3);
+        outline: none;
+    }
+
+    /* OTP Group styling */
+    .otp-group {
+        display: flex;
+        gap: 10px;
+        align-items: flex-end; /* Align input and button bottoms */
+    }
+
+    .otp-group input {
+        flex-grow: 1;
+        max-width: 150px;
+        text-align: center;
+    }
+
+    .otp-button {
+        padding: 10px 15px;
+        background: #a05252;
+        color: #FFF0D3;
+        border: none;
+        border-radius: 12px;
+        font-size: 14px;
+        cursor: pointer;
+        transition: background 0.3s ease;
+    }
+    .otp-button:hover {
+        background: #8b3a3a;
+    }
+
+    /* Toggle Button for Aadhaar */
+    #toggle-aadhaar
+    {
+        color: #FFF9EE;
+        display: block;
+        position: absolute;
+        top: 60px;
+        right: 10px;
+        padding: 6px 14px;
+        border-radius: 8px;
+        background: #4d2822;
+        border: 1px solid #FFF0D3;
+        cursor: pointer;
+        font-size: 13px;
+        z-index: 10;
+    }
+
+    /* Toggle Button for Create Password & Confirm Password*/
+    #toggle-create, #toggle-confirm
+    {
+        color: #FFF9EE;
+        display: block;
+        position: absolute;
+        top: 60px;
+        right: 10px;
+        padding: 6px 14px;
+        padding-bottom: 8px;
+        border-radius: 8px;
+        background: #4d2822;
+        border: 1px solid #FFF0D3;
+        cursor: pointer;
+        font-size: 13px;
+        z-index: 10;
+    }
+
+    #toggle-aadhaar:hover, #toggle-create:hover, #toggle-confirm:hover
+    {
+        background: #8b3a3a;
+    }
+
+    /* Button */
+    .btn
+    {
+        margin-top: 25px;
+        width: 100%;
+        padding: 12px;
+        background: #4d2822;
+        color: #FFF0D3;
+        border: none;
+        border-radius: 25px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background 0.3s ease;
+    }
+
+    .btn:hover
+    {
+        background: #8b3a3a;
+    }
+
+    /* Disabled Button Styling */
+    .btn:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+    }
+
+    /* Login Text */
+    .login-text
+    {
+        margin-top: 15px;
+        font-size: 14px;
+    }
+
+    .login-text a
+    {
+        color: #a05252;
+        text-decoration: none;
+    }
+
+    .login-text a:hover
+    {
+        text-decoration: underline;
+    }
+
+    /* Responsive */
+    @media (max-width: 480px)
+    {
+        .form-box
+        {
+            padding: 20px;
+        }
+    }
+</style>
+<body>
+    <div class="signup-container">
+        <div class="form-box">
+            <h1 class="title">Society Sync</h1>
+            <p class="subtitle">Society Fund Tracking & Management</p>
+            <h2 class="title">Sign Up</h2>
+            <form id="signup-form" action="#" method="post">
+
+                <div id="reg-details">
+                    <div class="input-group">
+                        <label for="name">Full Name</label>
+                        <input type="text" id="name" name="fullname" placeholder="Enter your full name" required>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="flat">Flat Number</label>
+                        <input type="text" id="flat" name="flat" placeholder="Enter your flat number" required>
+                    </div>
+
+                    <div class="input-group" style="position: relative;">
+                        <label for="aadhaar">Aadhaar Number</label>
+                        <input type="text" id="aadhaar" name="aadhaar" placeholder="Enter your Aadhaar number" required>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="occupation">Occupation</label>
+                        <input type="text" id="occupation" name="occupation" placeholder="Enter your occupation" required>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="members">Number of Family Members</label>
+                        <input type="number" id="members" name="members" placeholder="Enter number" required>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="family-names">Names of Family Members</label>
+                        <textarea id="family-names" name="family-names" placeholder="Enter names separated by commas" rows="3" required></textarea>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" name="phone" placeholder="Enter your phone number" required>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                    </div>
+                </div>
+
+                <div class="input-group" id="otp-group" style="display: none;">
+                    <label for="otp">Enter Email OTP</label>
+                    <div class="otp-group">
+                        <input type="text" id="otp" name="otp" placeholder="6-digit code" maxlength="6">
+                        <button type="button" class="otp-button" id="verify-otp-btn">Verify OTP</button>
+                    </div>
+                </div>
+
+                <div id="password-section" style="display: none;">
+                    <div class="input-group" style="position: relative;">
+                        <label for="create-password">Create Password</label>
+                        <input type="password" id="create-password" name="create-password" placeholder="Create a password">
+                    </div>
+
+                    <div class="input-group" style="position: relative;">
+                        <label for="confirm-password">Confirm Password</label>
+                        <input type="password" id="confirm-password" name="confirm-password" placeholder="Re-enter password to confirm">
+                    </div>
+                </div>
+
+                <p id="form-message" style="color: #a05252; margin-top: 10px;"></p>
+
+                <button type="button" class="btn" id="send-otp-btn">Send Verification Email</button>
+                <button type="submit" class="btn" id="final-signup-btn" style="display: none;">Sign Up</button>
+
+                <p class="login-text">
+                    Already have an account? <a href="login.html">Login</a>
+                </p>
+            </form>
+        </div>
+    </div>
+    <script>
+        // --- START: OTP & FORM LOGIC VARIABLES ---
+        let isEmailVerified = false;
+        let submittedEmail = "";
+        const formMessage = document.getElementById("form-message");
+        const sendOtpBtn = document.getElementById("send-otp-btn");
+        const verifyOtpBtn = document.getElementById("verify-otp-btn");
+        const finalSignupBtn = document.getElementById("final-signup-btn");
+        const otpGroup = document.getElementById("otp-group");
+        const passwordSection = document.getElementById("password-section");
+        const emailInput = document.getElementById("email");
+        const otpInput = document.getElementById("otp");
+        const regDetails = document.getElementById("reg-details");
+        const signupForm = document.getElementById("signup-form");
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        // --- END: OTP & FORM LOGIC VARIABLES ---
+
+        document.addEventListener("DOMContentLoaded", function () {
+            // --- Helper Functions ---
+            function disableRegistrationFields(disable) {
+                regDetails.querySelectorAll("input, textarea").forEach(el => el.disabled = disable);
+            }
+
+            // Helper function to validate all fields required before OTP send
+            function validateRequiredFields() {
+                const name = document.getElementById("name").value.trim();
+                const flat = document.getElementById("flat").value.trim();
+                const aadhaar = document.getElementById("aadhaar").value.trim();
+                const occupation = document.getElementById("occupation").value.trim();
+                const members = document.getElementById("members").value.trim();
+                const family_names = document.getElementById("family-names").value.trim();
+                const phone = document.getElementById("phone").value.trim();
+
+                if (!name || !flat || !aadhaar || !occupation || !members || !family_names || !phone) {
+                    formMessage.textContent = "Please fill all registration details before sending OTP.";
+                    return false;
+                }
+                if (aadhaar.length !== 12 || !/^\d{12}$/.test(aadhaar)) {
+                    formMessage.textContent = "Please enter a valid 12-digit Aadhaar Number.";
+                    return false;
+                }
+                if (phone.length !== 10 || !/^\d{10}$/.test(phone)) {
+                    formMessage.textContent = "Please enter a valid 10-digit Contact Number.";
+                    return false;
+                }
+                if (!emailRegex.test(emailInput.value.trim())) {
+                    formMessage.textContent = "Please enter a valid email address.";
+                    return false;
+                }
+                formMessage.textContent = "";
+                return true;
+            }
+            
+            // --- STEP 1: Send OTP Handler ---
+            sendOtpBtn.addEventListener("click", async function (e) {
+                e.preventDefault();
+
+                if (!validateRequiredFields()) return;
+
+                submittedEmail = emailInput.value.trim();
+                sendOtpBtn.disabled = true;
+                formMessage.textContent = "Sending OTP...";
+
+                try {
+                    const response = await fetch("http://localhost:8080/api/email/generate-otp", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ email: submittedEmail })
+                    });
+
+                    if (response.ok) {
+                        formMessage.textContent = "OTP sent! Check your email and enter the code below.";
+                        otpGroup.style.display = 'block';
+                        sendOtpBtn.style.display = 'none'; // Hide Send OTP button
+                    } else {
+                        const errorText = await response.text();
+                        formMessage.textContent = `Error sending OTP: ${errorText}`;
+                        sendOtpBtn.disabled = false;
+                    }
+                } catch (error) {
+                    formMessage.textContent = `Network error. Check server and email configuration.`;
+                    sendOtpBtn.disabled = false;
+                }
+            });
+
+            // --- STEP 2: Verify OTP Handler ---
+            verifyOtpBtn.addEventListener("click", async function (e) {
+                e.preventDefault();
+
+                const otp = otpInput.value.trim();
+                if (otp.length !== 6) {
+                    formMessage.textContent = "Please enter the 6-digit OTP.";
+                    return;
+                }
+
+                verifyOtpBtn.disabled = true;
+                formMessage.textContent = "Verifying OTP...";
+
+                try {
+                    const response = await fetch("http://localhost:8080/api/email/verify-otp", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ email: submittedEmail, otp: otp })
+                    });
+
+                    if (response.ok) {
+                        isEmailVerified = true;
+                        formMessage.textContent = "Email verified! Set password";
+
+                        // Show password section and final button, hide OTP section
+                        otpGroup.style.display = 'none';
+                        passwordSection.style.display = 'block';
+                        finalSignupBtn.style.display = 'block';
+                        
+                        // Lock registration details
+                        disableRegistrationFields(true);
+                        verifyOtpBtn.disabled = false;
+
+                    } else {
+                        formMessage.textContent = "Invalid OTP. Please try again or resend email.";
+                        verifyOtpBtn.disabled = false;
+                    }
+                } catch (error) {
+                    formMessage.textContent = `Network error during verification.`;
+                    verifyOtpBtn.disabled = false;
+                }
+            });
+
+            // --- STEP 3: Final Sign Up Submission Handler ---
+            signupForm.addEventListener("submit", function (e) {
+                e.preventDefault();
+
+                if (!isEmailVerified) {
+                    formMessage.textContent = "Email verification is required to complete sign up.";
+                    return;
+                }
+
+                const create = document.getElementById("create-password").value;
+                const password = document.getElementById("confirm-password").value;
+
+                // Re-validate passwords
+                if (create.length < 4) {
+                    formMessage.textContent = "Password should be at least 4 characters long.";
+                    return;
+                }
+                if (password !== create) {
+                    formMessage.textContent = "Passwords do not match.";
+                    return;
+                }
+
+                finalSignupBtn.disabled = true;
+                formMessage.textContent = "Registering...";
+
+                // Temporarily re-enable fields for submission and JSON serialization
+                disableRegistrationFields(false);
+
+                // Collect data
+                const formData = {
+                    fullname: document.getElementById("name").value.trim(),
+                    flat: document.getElementById("flat").value.trim(),
+                    aadhaar: document.getElementById("aadhaar").value.trim(),
+                    occupation: document.getElementById("occupation").value.trim(),
+                    members: parseInt(document.getElementById("members").value.trim()),
+                    family_names: document.getElementById("family-names").value.trim(),
+                    phone: document.getElementById("phone").value.trim(),
+                    email: document.getElementById("email").value.trim(),
+                    password: create
+                };
+
+                // Send data to backend (your original signup endpoint)
+                fetch("http://localhost:8080/api/signup", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(formData)
+                })
+                .then(res => {
+                    if (!res.ok) return res.text().then(text => { throw new Error(text); });
+                    return res.text();
+                })
+                .then(msg => {
+                    alert("Registration Successful: " + msg);
+                    window.location.href = "login.html"; // Redirect to login page
+                })
+                .catch(err => {
+                    formMessage.textContent = "Error: " + err.message;
+                    finalSignupBtn.disabled = false;
+                    // Re-disable fields after failed submission attempt
+                    disableRegistrationFields(true);
+                });
+            });
+
+
+            // --- ORIGINAL PASSWORD & AADHAAR TOGGLE LOGIC ---
+            const aadhaarInput = document.getElementById("aadhaar");
+            const toggleBtn = document.createElement("button");
+            toggleBtn.type = "button";
+            toggleBtn.id = "toggle-aadhaar";
+            toggleBtn.style.marginTop = "8px";
+            toggleBtn.textContent = "Show";
+            toggleBtn.disabled = true;
+            aadhaarInput.parentNode.appendChild(toggleBtn);
+
+            toggleBtn.addEventListener("click", function () {
+                if (aadhaarInput.type === "password") {
+                    aadhaarInput.type = "text";
+                    toggleBtn.textContent = "Hide";
+                } else {
+                    aadhaarInput.type = "password";
+                    toggleBtn.textContent = "Show";
+                }
+            });
+
+            aadhaarInput.addEventListener("input", function () {
+                const value = aadhaarInput.value.trim();
+                const isValid = value.length === 12 && /^\d{12}$/.test(value);
+                toggleBtn.disabled = !isValid;
+                if (!aadhaarInput.hasAttribute('data-visible') || aadhaarInput.getAttribute('data-visible') === 'false') {
+                    aadhaarInput.type = "password";
+                }
+                toggleBtn.textContent = "Show";
+            });
+
+            const create = document.getElementById("create-password");
+            const togglB = document.createElement("button");
+            togglB.type = "button";
+            togglB.id = "toggle-create";
+            togglB.style.marginTop = "8px";
+            togglB.textContent = "Show";
+            togglB.disabled = true;
+            create.addEventListener("input", function () {
+                togglB.disabled = create.value.length === 0;
+                create.type = "password";
+                togglB.textContent = "Show";
+            });
+            create.parentNode.appendChild(togglB);
+
+            togglB.addEventListener("click", function () {
+                if (create.type === "password") {
+                    create.type = "text";
+                    togglB.textContent = "Hide";
+                } else {
+                    create.type = "password";
+                    togglB.textContent = "Show";
+                }
+            });
+
+            const confirm = document.getElementById("confirm-password");
+            const togglC = document.createElement("button");
+            togglC.type = "button";
+            togglC.id = "toggle-confirm";
+            togglC.style.marginTop = "8px";
+            togglC.textContent = "Show";
+            togglC.disabled = true;
+            confirm.addEventListener("input", function () {
+                togglC.disabled = confirm.value.length === 0;
+                confirm.type = "password";
+                togglC.textContent = "Show";
+            });
+            confirm.parentNode.appendChild(togglC);
+
+            togglC.addEventListener("click", function () {
+                if (confirm.type === "password") {
+                    confirm.type = "text";
+                    togglC.textContent = "Hide";
+                } else {
+                    confirm.type = "password";
+                    togglC.textContent = "Show";
+                }
+            });
+        });
+    </script>
+</body>
+</html>
