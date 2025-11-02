@@ -1,0 +1,106 @@
+<!DOCTYPE html> 
+<html lang="en"> 
+<head> 
+    <meta charset="UTF-8" /> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/> 
+    <title>SocietySync - Quick Resolve</title> 
+    <link rel="stylesheet" href="style.css" /> 
+</head> 
+<style>
+    .banner
+    { 
+        background-color: #4d2822; 
+        color: #FFF9EE; 
+        padding: 20px; 
+        text-align: center; 
+        position: relative; 
+        width: 100%;
+        box-sizing: border-box;
+        margin-bottom: 50px;
+    }
+
+    .banner-icon
+    { 
+        position: absolute; 
+        left: 20px; 
+        top: 50%; 
+        transform: translateY(-50%); 
+        width: 75px; 
+        height: 75px; 
+    } 
+
+    .banner-title
+    { 
+        font-size: 28px; 
+        font-weight: bold; 
+    } 
+
+    /* Background */ 
+    body
+    { 
+        background-color: #FFF0D3;
+        font-family: 'Segoe UI', sans-serif;
+        margin: 0px;
+        padding: 0px;
+        padding-bottom: 50px;
+    } 
+
+    /* Options Grid */ 
+    .resolve-options
+    { 
+        display: grid; 
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); 
+        gap: 40px; 
+        max-width: 1100px; 
+        margin: 0 auto; 
+    } 
+
+    /* Option Card */ 
+    .option-card
+    { 
+        background-color: #FFF9EE; 
+        border-radius: 15px; 
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); 
+        padding: 110px; 
+        text-align: center; 
+        text-decoration: none; 
+        transition: transform 0.3s ease, background-color 0.3s ease; 
+    } 
+
+    .option-card h3
+    { 
+        font-size: 30px; 
+        color: #4d2822; 
+    } 
+
+    .option-card:hover
+    { 
+        transform: translateY(-5px); 
+        background-color: #fff3d0; 
+    } 
+</style>
+<body> 
+    <!-- Top Banner --> 
+    <header class="banner"> 
+        <h1 class="banner-title">Quick Resolve </h1> 
+        <a href="homepage.html">
+            <img src="Images/Home.png" alt=" Go back to Home Icon" style="position: absolute; left: 20px; top: 50%; transform: translateY(-50%); width: 75px; height: 75px;">
+        </a>
+    </header>  
+
+    <!-- Navigation Cards --> 
+    <main class="resolve-options"> 
+        <a href="qr_writeQuery.html" class="option-card"> 
+            <h3>Write Query</h3> 
+        </a> 
+
+        <a href="qr_raisedQuery.html" class="option-card"> 
+            <h3>Raised Queries</h3> 
+        </a> 
+
+        <a href="qr_solvedQuery.html" class="option-card"> 
+            <h3>Solved Queries</h3> 
+        </a> 
+    </main> 
+</body> 
+</html>

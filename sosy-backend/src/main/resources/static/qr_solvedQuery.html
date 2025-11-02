@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Solved Queries - SocietySync</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background: linear-gradient(135deg, #FFF0D3, #FFF9EE); min-height: 100vh; }
+        .banner { background-color: #4d2822; color: #FFF9EE; padding: 20px; text-align: center; position: relative; width: 100%; box-sizing: border-box; margin-bottom: 50px; }
+        .banner-title { font-size: 28px; font-weight: bold; }
+        .back-icon { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); width: 75px; height: 75px; }
+        
+        /* Query Card Styles */
+        .query-container { max-width: 900px; margin: 0 auto; padding: 0 20px; }
+        .query-card { background-color: #FFF9EE; padding: 20px; border-left: 5px solid #2E8B57; border-radius: 8px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); margin-bottom: 25px; }
+        .query-card h3 { color: #4d2822; margin-bottom: 10px; font-size: 20px; }
+        .query-meta { font-size: 13px; color: #666; margin-bottom: 10px; border-bottom: 1px dashed #eee; padding-bottom: 5px; }
+        .query-description { margin-top: 10px; color: #444; line-height: 1.5; }
+        
+        .solution-section { margin-top: 15px; padding: 15px; background: #e6f7ef; border-radius: 5px; border-left: 3px solid #2E8B57; }
+        .solution-section h4 { color: #246b45; margin-bottom: 5px; font-size: 16px; }
+        .solution-meta { font-style: italic; font-size: 12px; margin-top: 10px; color: #666; }
+    </style>
+</head>
+<body>
+    <header class="banner">
+        <h1>Quick Resolve </h1>
+        <p>Questions Answered!</p>
+        <a href="quickResolve.html">
+        <img src="Images/Back to qR.png" alt="Back to Quick Resolve" class="back-icon">
+        </a>
+    </header> 
+    
+    <div id="queryList" class="query-container">
+        <p style="text-align: center; color: #4d2822;">Loading solved queries...</p>
+    </div>
+    
+    <script defer>
+    document.addEventListener('DOMContentLoaded', fetchSolvedQueries);
+
+    async function fetchSolvedQueries() {
+        const queryListDiv = document.getElementById('queryList');
+        queryListDiv.innerHTML = '<p style="text-align: center; color: #4d2822; padding: 30px;">Loading solved queries...</p>';
+
+        try {
+            const res = await fetch("/api/quickresolve/solved");
+            const queries = await res.json();
+            
+            queryListDiv.innerHTML = ''; // Clear loading message
+
+            if (queries.length === 0) {
+                queryListDiv.innerHTML = '<p style="text-align: center; color: #666; padding: 30px;">There are no solved queries available in the archive yet.</p>';
+                return;
+            }
+
+            // Utility function to safely format dates from LocalDateTime object
+            const formatDate = (dateTimeString) => {
+                if (!dateTimeString) return 'N/A';
+                try {
+                    const date = new Date(dateTimeString);
+                    // Check if date object is valid (e.g., if parsing didn't return "Invalid Date")
+                    if (isNaN(date)) return dateTimeString; 
+
+                    return date.toLocaleDateString('en-US', { 
+                        year: 'numeric', month: 'short', day: 'numeric', 
+                        hour: '2-digit', minute: '2-digit' 
+                    });
+                } catch (e) {
+                    return dateTimeString; // Return raw string if formatting fails
+                }
+            };
+
+
+            queries.forEach(query => {
+                // *** SAFESEARCH LOGIC: Check for both camelCase (Java) and snake_case (potential JSON mismatch) ***
+                const residentName = query.residentName || query.resident_name || 'N/A';
+                const residentFlatNo = query.residentFlatNo || query.resident_flat_no || 'N/A';
+                const dateRaised = query.dateRaised || query.date_raised || 'N/A';
+                const committeeAnswer = query.committeeAnswer || query.committee_answer || 'No answer text provided.';
+                const answeredBy = query.answeredBy || query.answered_by || 'N/A';
+                const dateSolved = query.dateSolved || query.date_solved || 'N/A';
+
+                const card = document.createElement('div');
+                card.classList.add('query-card');
+
+                card.innerHTML = `
+                    <h3>✅ ${query.title} (ID: ${query.id})</h3>
+                    <p class="query-meta">
+                        Raised by: <strong>${residentName}</strong> | Flat: <strong>${residentFlatNo}</strong> | ${formatDate(dateRaised)}
+                    </p>
+                    <p class="query-description">
+                        <strong>Resident Query:</strong> ${query.description}
+                    </p>
+                    <div class="solution-section">
+                        <h4>Resolution Provided:</h4>
+                        <p>${committeeAnswer}</p>
+                        <p class="solution-meta">
+                            Resolved by: <strong>${answeredBy}</strong> on ${formatDate(dateSolved)}
+                        </p>
+                    </div>
+                `;
+                queryListDiv.appendChild(card);
+            });
+        } catch (err) {
+            console.error("Fetch solved queries failed:", err);
+            queryListDiv.innerHTML = '<p style="text-align: center; color: red; padding: 30px;">Error loading solved queries. Check the server connection and API response format.</p>';
+        }
+    }
+</script>
+</body>
+</html>

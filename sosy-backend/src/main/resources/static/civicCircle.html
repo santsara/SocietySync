@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>SocietySync - Civic Circle</title>
+    <style>
+        /* Banner */ 
+        .banner
+        { 
+            background-color: #4d2822; 
+            color: #FFF9EE; 
+            padding: 20px; 
+            text-align: center; 
+            position: relative; 
+            width: 100%;
+            box-sizing: border-box;
+            margin-bottom: 50px;
+        } 
+
+        .banner-icon
+        { 
+            position: absolute; 
+            left: 20px; 
+            top: 50%; 
+            transform: translateY(-50%); 
+            width: 75px; 
+            height: 75px; 
+        } 
+
+        .banner-title
+        { 
+            font-size: 28px; 
+            font-weight: bold; 
+        } 
+
+        body
+        {
+            background: linear-gradient(135deg, #FFF0D3, #FFF9EE);
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0px;
+            padding: 0px;
+            padding-bottom: 50px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1
+        {
+            text-align: center;
+            margin-bottom: 30px;
+            width: 100%;
+        }
+        
+        section.civic-circle {
+            max-width: 800px;
+            width: 100%;
+            margin: auto;
+            padding: 0 20px;
+        }
+
+        .category
+        {
+            background-color: #FFF9EE;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 0 8px rgba(0,0,0,0.1);
+        }
+
+        .category-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .category button.toggle-btn
+        {
+            background-color: #8b3a3a; /* Darker red from the theme */
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .category button.toggle-btn:hover
+        {
+            background-color: #4d2822;
+        }
+
+        .resident-list
+        {
+            display: none;
+            margin-top: 15px;
+            padding: 10px 0 0 0;
+            list-style: none;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        .resident-list li
+        {
+            margin-bottom: 8px;
+            padding: 5px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px dashed #eee;
+        }
+        .resident-list li:last-child {
+            border-bottom: none;
+        }
+        
+        .resident-details {
+             flex-grow: 1;
+        }
+        .resident-flat-number {
+             min-width: 80px;
+             text-align: center;
+             font-weight: 600;
+             color: #444;
+        }
+        .resident-contact {
+             min-width: 150px; 
+             text-align: right;
+             font-weight: bold;
+             color: #4d2822; 
+        }
+        
+        /* Committee Form Styles */
+        #residentFormContainer {
+            display: none; 
+            margin-bottom: 40px;
+            max-width: 800px;
+            width: 100%;
+            padding: 0 20px;
+        }
+        #residentEditForm {
+            background: #fff9ee;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        #residentEditForm h3 {
+            margin-bottom: 20px;
+            color: #4d2822;
+        }
+        #residentEditForm label {
+            font-weight: bold;
+            display: block;
+            margin-top: 10px;
+        }
+        #residentEditForm input[type="text"], #residentEditForm input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        
+        /* PRIMARY BUTTON STYLE (Submit) */
+        #residentEditForm button[type="submit"] { 
+            background-color: #4d2822; 
+            color: #fff9ee; 
+            padding: 10px 20px; 
+            border: none; 
+            border-radius: 5px; 
+            cursor: pointer; 
+            margin-top: 5px; 
+        }
+
+        /* SECONDARY BUTTON STYLE (Cancel) */
+        #residentEditForm button[type="button"] {
+            background-color: #4d2822;
+            color: #fff9ee;
+            padding: 10px 20px; 
+            border: 1px solid #4d2822;
+            border-radius: 5px; 
+            cursor: pointer; 
+            margin-top: 5px; 
+            margin-left: 10px; 
+        }
+        
+        /* ADD BUTTON style */
+        .add-btn-container {
+            width: 100%;
+            max-width: 800px;
+            margin: 20px auto 30px auto;
+            padding: 0 20px;
+        }
+        .action-btn { 
+            background-color: #8b3a3a; 
+            color: #fff9ee; 
+            padding: 10px 20px;
+            border: none; 
+            border-radius: 5px; 
+            cursor: pointer; 
+            font-size: 16px; 
+            font-weight: bold;
+        }
+        
+        /* EDIT BUTTON on list item style */
+        .edit-btn {
+            background-color: #4d2822;
+            color: #fff;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+            margin-left: 10px;
+            flex-shrink: 0;
+        }
+    </style>
+</head>
+<body>
+    <header class="banner"> 
+        <img src="Images\Home.png" alt="Go Home Icon" class="banner-icon" /> 
+        <h1 class="banner-title">Civic Circle </h1> 
+        <a href="homepage.html">
+            <img src="Images\Home.png" alt="Go Home Icon" style="position: absolute; left: 20px; top: 50%; transform: translateY(-50%); width: 75px; height: 75px;">
+        </a>
+    </header> 
+
+    <div id="committeeActions" class="add-btn-container" style="display: none;">
+        <button id="addNewResidentBtn" class="action-btn">➕ Add New Professional</button>
+    </div>
+    
+    <div id="residentFormContainer">
+        <form id="residentEditForm">
+            <h3 id="formTitle">Add New Professional</h3>
+            <input type="hidden" id="residentId" name="id" value=""> 
+
+            <label for="professionInput">Profession (e.g., Doctors, Lawyers, etc.):</label>
+            <input type="text" id="professionInput" name="profession" required>
+            
+            <label for="nameAndTitleInput">Name and Title (e.g., Dr. Meera Joshi, Adv. Sneha Rao):</label>
+            <input type="text" id="nameAndTitleInput" name="nameAndTitle" required>
+
+            <label for="flatNoInput">Flat Number (e.g., A-102):</label>
+            <input type="text" id="flatNoInput" name="flatNo" required>
+
+            <label for="contactNumberInput">Contact Number:</label>
+            <input type="text" id="contactNumberInput" name="contactNumber" required>
+
+            <label for="sortOrderInput">Sort Order (Lower number appears first in the profession list):</label>
+            <input type="number" id="sortOrderInput" name="sortOrder" value="999">
+            
+            <button type="submit">Submit Resident</button>
+            <button type="button" onclick="hideForm()">Cancel</button>
+        </form>
+    </div>
+
+    <section id="residentsContainer" class="civic-circle">
+        <p id="loadingMessage" style="text-align: center;">Loading civic circle data...</p>
+        </section>
+
+    <script>
+        // Global storage for fetched data and committee status
+        window.residentsData = [];
+        window.isCommittee = false;
+        
+        const formContainer = document.getElementById('residentFormContainer');
+        const formTitle = document.getElementById('formTitle');
+        const residentForm = document.getElementById('residentEditForm');
+        const addNewResidentBtn = document.getElementById('addNewResidentBtn');
+        const residentsContainer = document.getElementById('residentsContainer');
+        const committeeActions = document.getElementById('committeeActions');
+        
+        // --- Toggle Function (retains original HTML functionality) ---
+        function toggleList(id) {
+            const list = document.getElementById('list-' + id);
+            list.style.display = list.style.display === 'block' ? 'none' : 'block';
+        }
+
+
+        // --- Committee Form Logic ---
+
+        function showForm() {
+            formContainer.style.display = 'block';
+            formContainer.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function hideForm() {
+            formContainer.style.display = 'none';
+        }
+
+        function prepareForAdd() {
+            residentForm.reset();
+            document.getElementById('residentId').value = '';
+            document.getElementById('sortOrderInput').value = '999';
+            formTitle.textContent = 'Add New Professional';
+            showForm();
+        }
+
+        function handleEdit(id) {
+            const resident = window.residentsData.find(r => r.id === id);
+            
+            if (!resident) {
+                alert("Error: Resident data not found.");
+                return;
+            }
+
+            document.getElementById('residentId').value = resident.id; 
+            document.getElementById('professionInput').value = resident.profession;
+            document.getElementById('nameAndTitleInput').value = resident.nameAndTitle;
+            document.getElementById('flatNoInput').value = resident.flatNo;
+            document.getElementById('contactNumberInput').value = resident.contactNumber;
+            document.getElementById('sortOrderInput').value = resident.sortOrder;
+            
+            formTitle.textContent = 'Edit Professional: ' + resident.nameAndTitle;
+
+            showForm();
+        }
+
+
+        // --- MAIN FETCH AND INITIALIZATION ---
+
+        fetch("/api/residents")
+            .then(res => res.json())
+            .then(data => {
+                residentsContainer.innerHTML = ''; // Clear loading message
+
+                if (data.status !== "success") {
+                    residentsContainer.innerHTML = `<p style="color: red; text-align: center;">${data.message || "Failed to load residents."}</p>`;
+                    return;
+                }
+
+                window.residentsData = data.data || [];
+                window.isCommittee = data.isCommittee;
+                
+                const residents = window.residentsData;
+
+                // Show committee-only elements
+                if (window.isCommittee) {
+                    committeeActions.style.display = "block";
+                    addNewResidentBtn.addEventListener('click', prepareForAdd);
+                }
+
+                if (residents.length === 0) {
+                    residentsContainer.innerHTML = '<p style="text-align: center; color: #666; padding: 20px;">No professionals registered yet.</p>';
+                    return;
+                }
+
+                // Group residents by profession
+                const groupedResidents = residents.reduce((acc, resident) => {
+                    const group = resident.profession;
+                    if (!acc[group]) {
+                        acc[group] = [];
+                    }
+                    acc[group].push(resident);
+                    return acc;
+                }, {});
+
+                // Render the groups
+                for (const profession in groupedResidents) {
+                    const cleanId = profession.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+                    const categoryDiv = document.createElement("div");
+                    categoryDiv.classList.add("category");
+                    
+                    categoryDiv.innerHTML = `
+                        <div class="category-header">
+                            <button class="toggle-btn" onclick="toggleList('${cleanId}')"> ${profession} </button>
+                        </div>
+                        <ul id="list-${cleanId}" class="resident-list">
+                            </ul>
+                    `;
+                    
+                    const ul = categoryDiv.querySelector('ul');
+
+                    groupedResidents[profession].forEach(r => {
+                        let editButton = window.isCommittee 
+                            ? `<button class="edit-btn" onclick="handleEdit(${r.id})">Edit</button>` 
+                            : '';
+                        
+                        const li = document.createElement("li");
+                        
+                        li.innerHTML = `
+                            <span class="resident-details">📞 <strong>${r.nameAndTitle}</strong></span>
+                            <span class="resident-flat-number">Flat ${r.flatNo}</span>
+                            <span class="resident-contact">${r.contactNumber}</span>
+                            ${editButton}
+                        `;
+                        ul.appendChild(li);
+                    });
+
+                    residentsContainer.appendChild(categoryDiv);
+                }
+
+            })
+            .catch(err => {
+                console.error("Residents fetch failed:", err);
+                residentsContainer.innerHTML = '<p style="color: red; padding: 20px; text-align: center;">Server error while loading data.</p>';
+            });
+
+
+        // --- FORM SUBMISSION HANDLER ---
+
+        residentForm.addEventListener("submit", function(e) {
+            e.preventDefault();
+
+            if (!window.isCommittee) {
+                alert("Access denied. You do not have permission to modify data.");
+                return;
+            }
+
+            const residentIdValue = document.getElementById('residentId').value;
+            const sortOrderValue = document.getElementById('sortOrderInput').value;
+            
+            const idToSend = (residentIdValue && !isNaN(parseInt(residentIdValue))) ? parseInt(residentIdValue) : null;
+            
+            // Gather form data
+            const payload = {
+                id: idToSend, // Crucial for backend UPDATE/CREATE decision
+                profession: document.getElementById('professionInput').value.trim(),
+                nameAndTitle: document.getElementById('nameAndTitleInput').value.trim(),
+                flatNo: document.getElementById('flatNoInput').value.trim(),
+                contactNumber: document.getElementById('contactNumberInput').value.trim(),
+                sortOrder: parseInt(sortOrderValue) || 999
+            };
+
+            fetch("/api/residents", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            })
+            .then(res => res.json())
+            .then(data => {
+                alert(data.message || "Operation completed.");
+                if (data.status === "success") {
+                    location.reload(); // Refresh the page
+                }
+            })
+            .catch(err => {
+                console.error("Resident submission failed:", err);
+                alert("Server error while submitting data.");
+            });
+        });
+    </script>
+</body>
+</html>
