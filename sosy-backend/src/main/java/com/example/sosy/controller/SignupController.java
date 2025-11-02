@@ -3,7 +3,7 @@ package com.example.sosy.controller;
 import com.example.sosy.model.User;
 import com.example.sosy.model.LoginRequest;
 import com.example.sosy.service.UserService;
-import com.example.sosy.dto.UserProfile; // ⭐ DTO NAME UPDATED
+import com.example.sosy.dto.UserProfile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
@@ -14,12 +14,12 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/signup")
-public class SignupController {
+public class SignupController
+{
 
-    @Autowired
     private UserService userService;
 
-    // ✅ Registration endpoint
+    // Registration endpoint
     @PostMapping
     public ResponseEntity<String> signUp(@RequestBody User user) {
         try {
@@ -36,7 +36,7 @@ public class SignupController {
         }
     }
 
-    // ✅ Login endpoint
+    // Login endpoint
     @PostMapping("/login")
     public ResponseEntity<Map<String, Object>> login(@RequestBody LoginRequest request, HttpSession session) {
         System.out.println("Login attempt for flat: " + request.getFlat());
@@ -59,7 +59,7 @@ public class SignupController {
             ));
         }
 
-        // ✅ Committee validation
+        // Committee validation
         if (request.getCommitteeId() != null && !request.getCommitteeId().isEmpty()) {
             if (!Boolean.TRUE.equals(user.isCommittee())) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Map.of(
@@ -75,7 +75,7 @@ public class SignupController {
             }
         }
 
-        // ✅ Store session attributes
+        // Store session attributes
         session.setAttribute("flat", user.getFlat());
         session.setAttribute("is_committee", user.isCommittee()); 
 
@@ -88,13 +88,13 @@ public class SignupController {
         ));
     }
 
-    // ⭐ NEW ENDPOINT: GET user profile details for homepage display
+    // NEW ENDPOINT: GET user profile details for homepage display
     /**
      * API Endpoint: GET /api/signup/details
      * Fetches the profile data for the currently logged-in user using the session.
      */
     @GetMapping("/details")
-    public ResponseEntity<UserProfile> getLoggedInUserProfile(HttpSession session) { // ⭐ RETURN TYPE UPDATED
+    public ResponseEntity<UserProfile> getLoggedInUserProfile(HttpSession session) {
         
         // 1. Get the Flat Number from the session attribute set during login.
         String flatNo = (String) session.getAttribute("flat"); 

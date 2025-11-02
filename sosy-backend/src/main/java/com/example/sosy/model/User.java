@@ -10,8 +10,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 @Table(name = "users")
-public class User {
-
+public class User 
+{
     @Column(name = "fullname", nullable = false)
     @NotBlank(message = "Full name is required")
     private String fullname;
@@ -54,94 +54,114 @@ public class User {
     @Size(min = 4, message = "Password must be at least 4 characters long")
     private String password;
 
-    // ✅ Committee status
+    // Committee status
     @Column(name = "is_committee", nullable = false)
     private Boolean isCommittee;
 
     // Getters and Setters
-
-    public String getFullname() {
+    public String getFullname()
+    {
         return fullname;
     }
 
-    public void setFullname(String fullname) {
+    public void setFullname(String fullname)
+    {
         this.fullname = fullname;
     }
 
-    public String getFlat() {
+    public String getFlat()
+    {
         return flat;
     }
 
-    public void setFlat(String flat) {
+    public void setFlat(String flat)
+    {
         this.flat = flat;
     }
 
-    public String getAadhaar() {
+    public String getAadhaar()
+    {
         return aadhaar;
     }
 
-    public void setAadhaar(String aadhaar) {
+    public void setAadhaar(String aadhaar)
+    {
         this.aadhaar = aadhaar;
     }
 
-    public String getOccupation() {
+    public String getOccupation()
+    {
         return occupation;
     }
 
-    public void setOccupation(String occupation) {
+    public void setOccupation(String occupation)
+    {
         this.occupation = occupation;
     }
 
-    public Integer getMembers() {
+    public Integer getMembers()
+    {
         return members;
     }
 
-    public void setMembers(Integer members) {
+    public void setMembers(Integer members)
+    {
         this.members = members;
     }
 
-    public String getFamilyNames() {
+    public String getFamilyNames()
+    {
         return familyNames;
     }
 
-    public void setFamilyNames(String familyNames) {
+    public void setFamilyNames(String familyNames)
+    {
         this.familyNames = familyNames;
     }
 
-    public String getPhone() {
+    public String getPhone()
+    {
         return phone;
     }
 
-    public void setPhone(String phone) {
+    public void setPhone(String phone)
+    {
         this.phone = phone;
     }
 
-    public String getEmail() {
+    public String getEmail()
+    {
         return email;
     }
 
-    public void setEmail(String email) {
+    public void setEmail(String email)
+    {
         this.email = email;
     }
 
-    public String getPassword() {
+    public String getPassword()
+    {
         return password;
     }
 
-    public void setPassword(String password) {
+    public void setPassword(String password)
+    {
         this.password = password;
     }
 
-    public boolean isCommittee() {
+    public boolean isCommittee()
+    {
         return Boolean.TRUE.equals(isCommittee);
     }
 
-    public void setCommittee(boolean isCommittee) {
+    public void setCommittee(boolean isCommittee)
+    {
         this.isCommittee = isCommittee;
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         return "User{" +
                 "flat='" + flat + '\'' +
                 ", fullname='" + fullname + '\'' +
