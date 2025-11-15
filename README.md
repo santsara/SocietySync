@@ -5,14 +5,14 @@ This platform replaces fragmented, manual processes with a unified digital ecosy
 ## Key Features and Modules
 The application provides a centralized dashboard built around six core modules:
 
-| Module | Core Functionality | Purpose |
+| Module | Purpose | Functionality |
 | :--- | :--- | :--- |
-| **Fund Flow** | Tracks **current fund balance** (maintenance and donations) and displays a clear list of **defaulters** with pending dues. | Financial Transparency |
-| **Festival Budget** | Allows committee members to track **festival-wise budget** allocation, money used, donations received, and remaining funds. | Budget Accountability |
-| **Sectoral Distribution** | Provides a **visual breakdown** (pie chart) of fund allocation across major sectors like security, sanitation, and infrastructure. | Financial Reporting |
-| **Notice Board** | Centralizes and displays society announcements, event updates, and maintenance schedules, with the ability to **highlight urgent notices**. | Communication |
-| **Quick Resolve** | Simplifies **issue reporting** and tracking. Residents can raise queries, and committee members can provide resolutions, updating the query status efficiently. | Issue Management |
-| **Civic Circle** | A directory of **verified professionals** (doctors, lawyers, advisors) residing within the community, including contact details and filtering options. | Community Networking |
+| **Fund Flow** | Transparent record keeping | Displays **current fund balance** (maintenance and donations), **festival-wise budget** tracking, and a list of **defaulters** with pending dues. |
+| **Sectoral Distribution** | Accountability in expenditure | Provides a visual breakdown (pie chart) of fund allocation across major sectors (Security, Sanitation, Infrastructure). |
+| **Quick Resolve** | Effective issue management | Simplifies **issue reporting** and tracking. Residents can raise queries, and committee members can update the status (e.g., Pending, In Progress, Resolved). |
+| **Society Connect** | Fostering communication | An internal communication channel for residents and committee members to share important information and discuss society matters. |
+| **Notice Board** | Centralized communication | Displays society announcements, event updates, and maintenance schedules. Urgent notices can be **highlighted** for immediate attention. |
+| **Civic Circle** | Community networking | A searchable directory of **verified professionals** (doctors, lawyers, advisors) residing within the community, including contact details. |
 
 ---
 
