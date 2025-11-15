@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SocietySync - Maintenance Defaulters</title>
+  <style>
+    /* Your original styles unchanged */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    body {
+      background: linear-gradient(135deg, #FFF0D3, #FFF9EE);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .banner {
+      background-color: #4d2822;
+      color: #FFF9EE;
+      text-align: center;
+      padding: 30px 20px;
+      width: 100%;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      position: relative;
+    }
+    .banner-icon {
+      position: absolute;
+      left: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 75px;
+      height: 75px;
+    }
+    .banner h1 {
+      font-size: 32px;
+      margin-bottom: 10px;
+    }
+    .table-container {
+      background: #fff9ee;
+      margin: 40px 20px;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 800px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      padding: 14px 18px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+      font-size: 16px;
+    }
+    th {
+      background-color: #fff0d3;
+      color: #4d2822;
+    }
+    td.amount {
+      text-align: right;
+      font-weight: bold;
+      color: #4d2822;
+    }
+    tr:hover {
+      background-color: #fcefdc;
+    }
+    button {
+      padding: 6px 14px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    .edit-btn {
+      background-color: #4d2822;
+      color: #fff9ee;
+    }
+    .edit-btn:hover {
+      background-color: #6a3a30;
+    }
+    .delete-btn {
+      background-color: #a83232;
+      color: #fff9ee;
+      margin-left: 8px;
+    }
+    .delete-btn:hover {
+      background-color: #8c1f1f;
+    }
+    .add-btn {
+      background-color: #6a3a30;
+      color: #fff9ee;
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .add-btn:hover {
+      background-color: #4d2822;
+    }
+    #update-form, #add-form {
+      display: none;
+      margin-top: 30px;
+      background: #fff9ee;
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 500px;
+    }
+    #update-form input, #add-form input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 12px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+    #update-form button, #add-form button {
+      padding: 10px 16px;
+      background-color: #4d2822;
+      color: #fff9ee;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    #update-form button:hover, #add-form button:hover {
+      background-color: #6a3a30;
+    }
+  </style>
+</head>
+<body>
+  <header class="banner">
+    <a href="fundFlow.html">
+      <img src="images/Back to fF.png" alt="Back" class="banner-icon" />
+    </a>
+    <h1>Defaulters</h1>
+    <p>Members with pending maintenance dues</p>
+    <div id="session-info" style="margin-top:8px; font-size:14px; color:#fff9ee; opacity:0.9;"></div>
+  </header>
+
+  <main class="table-container">
+    <button id="add-defaulter-btn" class="add-btn" style="display: none;">
+      <span>+ Add New Defaulter</span>
+    </button>
+    <table id="defaulter-table">
+      <thead>
+        <tr id="table-header">
+          <th>Resident Name</th>
+          <th>Flat Number</th>
+          <th style="text-align:right;">Unpaid Amount (₹)</th>
+          <th id="actions-header" style="display: none;">Actions</th>
+        </tr>
+      </thead>
+      <tbody id="defaulter-body">
+        <tr><td colspan="4" style="text-align:center;">Loading...</td></tr>
+      </tbody>
+    </table>
+  </main>
+
+  <div id="update-form">
+    <h3>Update Defaulter</h3>
+    <form id="form-update">
+      <input type="hidden" id="originalFlatNumber" /> 
+      <input type="text" id="flatNumber" placeholder="Flat Number" required />
+      <input type="text" id="residentName" placeholder="Resident Name" required />
+      <input type="number" id="unpaidAmount" placeholder="Unpaid Amount (₹)" required />
+      <button type="submit">Update</button>
+    </form>
+  </div>
+
+  <div id="add-form">
+    <h3>Add Defaulter</h3>
+    <form id="form-add">
+      <input type="text" id="addFlatNumber" placeholder="Flat Number" required />
+      <input type="text" id="addResidentName" placeholder="Resident Name" required />
+      <input type="number" id="addUnpaidAmount" placeholder="Unpaid Amount (₹)" required />
+      <button type="submit">Add</button>
+    </form>
+  </div>
+
+  <script>
+document.addEventListener("DOMContentLoaded", () => {
+    const tableBody = document.getElementById("defaulter-body");
+    const addBtn = document.getElementById("add-defaulter-btn");
+    const actionsHeader = document.getElementById("actions-header");
+    const updateForm = document.getElementById("update-form");
+    const addForm = document.getElementById("add-form");
+    let editingId = null;
+    let isCommittee = false;
+
+    // *** CHANGE: Update the API endpoint base path ***
+    const API_ENDPOINT = "/api/defaulters"; 
+
+    function loadDefaulters() {
+      fetch(API_ENDPOINT, { credentials: 'same-origin' })
+        .then(res => res.json())
+        .then(data => {
+          // Debug: show raw response in console and session-info on page
+          console.log('Defaulters API response:', data);
+          const sessionInfo = document.getElementById('session-info');
+          if (sessionInfo) {
+            const committeeText = (data.is_committee === true || data.is_committee == 1) ? 'Committee member' : 'Resident';
+            sessionInfo.textContent = `You are: ${committeeText}`;
+          }
+            if(data.status !== "success") {
+                tableBody.innerHTML = `<tr><td colspan="4" style="text-align:center;">Failed to load data. Check backend.</td></tr>`;
+                return;
+            }
+            
+            // Update committee status and UI visibility
+            // Backend may return 1/0 or true/false — accept both forms
+            isCommittee = (data.is_committee === true) || (data.is_committee == 1) || (data.is_committee === '1');
+            
+            // Show/hide committee-only elements
+            actionsHeader.style.display = isCommittee ? "" : "none";
+            addBtn.style.display = isCommittee ? "block" : "none";
+            
+            tableBody.innerHTML = "";
+
+            if (!data.defaulters || data.defaulters.length === 0) {
+                const colspan = isCommittee ? 4 : 3;
+                tableBody.innerHTML = `<tr><td colspan="${colspan}" style="text-align:center;">No defaulters found</td></tr>`;
+                return;
+            }
+
+
+            // Sort and deduplicate defaulters by flat number (show most recent entry)
+            const defaultersMap = new Map();
+            data.defaulters.forEach(d => {
+                if (!defaultersMap.has(d.flat_number) || defaultersMap.get(d.flat_number).id < d.id) {
+                    defaultersMap.set(d.flat_number, d);
+                }
+            });
+            
+            // Convert map values back to array and sort by flat number
+            Array.from(defaultersMap.values())
+                .sort((a, b) => a.flat_number.localeCompare(b.flat_number))
+                .forEach(d => {
+                    const tr = document.createElement("tr");
+                    const formattedAmount = `₹${parseFloat(d.unpaid_amount).toLocaleString("en-IN")}`;
+                
+                    tr.innerHTML = `
+                    <td>${d.resident_name}</td>
+                    <td>${d.flat_number}</td>
+                    <td style="text-align:right;">${formattedAmount}</td>
+                    ${isCommittee ? `
+                    <td>
+                        <button class="edit-btn" data-flat="${d.flat_number}">Edit</button>
+                        <button class="delete-btn" data-flat="${d.flat_number}">Delete</button>
+                    </td>
+                    ` : '<td style="display:none;"></td>'}
+                `;
+                tableBody.appendChild(tr);
+            });
+        })
+        .catch(err => {
+              console.error("Fetch error:", err);
+              const colspan = isCommittee ? 4 : 3;
+              tableBody.innerHTML = `<tr><td colspan="${colspan}" style="text-align:center; color:red;">Connection error.</td></tr>`;
+        });
+    }
+
+    loadDefaulters();
+
+    // Add button click handler
+    addBtn.addEventListener("click", () => {
+        if (!isCommittee) {
+            alert("Only committee members can add defaulters");
+            return;
+        }
+        editingId = null;
+        document.getElementById("form-add").reset();
+        addForm.style.display = "block";
+        updateForm.style.display = "none";
+    });
+
+    // Update form submit handler
+    document.getElementById("form-update").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        if (!isCommittee) {
+            alert("Only committee members can update defaulters");
+            return;
+        }
+
+        const resident_name = document.getElementById("residentName").value.trim();
+        const flat_number = document.getElementById("originalFlatNumber").value.trim();
+        const unpaid_amount = parseFloat(document.getElementById("unpaidAmount").value);
+        
+        if (!resident_name || !flat_number || isNaN(unpaid_amount)) {
+            alert("All fields are required and amount must be a number");
+            return;
+        }
+
+        if (unpaid_amount <= 0) {
+            alert("Amount must be greater than 0");
+            return;
+        }
+
+        try {
+            const requestData = {
+                resident_name: resident_name.trim(),
+                flat_number: flat_number.toUpperCase().trim(),
+                unpaid_amount: Math.abs(unpaid_amount)
+            };
+            console.log('Updating defaulter:', requestData);
+            const response = await fetch(API_ENDPOINT, {
+                method: 'PUT',
+                credentials: 'same-origin',
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(requestData)
+            });
+
+            const data = await response.json();
+            console.log('Update response:', data);
+
+            if (data.status === "success") {
+                alert(data.message || 'Update successful');
+                updateForm.style.display = "none";
+                loadDefaulters();
+            } else {
+                alert(data.message || 'Update failed');
+            }
+        } catch (err) {
+            console.error('Update error:', err);
+            alert("Server error during save");
+        }
+    });
+
+    // Add form submit handler
+    document.getElementById("form-add").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        if (!isCommittee) {
+            alert("Only committee members can add defaulters");
+            return;
+        }
+
+        const resident_name = document.getElementById("addResidentName").value.trim();
+        const flat_number = document.getElementById("addFlatNumber").value.trim();
+        const unpaid_amount = parseFloat(document.getElementById("addUnpaidAmount").value);
+
+        if (!resident_name || !flat_number || isNaN(unpaid_amount)) {
+            alert("All fields are required and amount must be a number");
+            return;
+        }
+
+        try {
+            const requestData = {
+                resident_name: resident_name.trim(),
+                flat_number: flat_number.toUpperCase().trim(), // Convert to uppercase
+                unpaid_amount: Math.abs(unpaid_amount) // Ensure positive number
+            };
+            
+            console.log('Adding defaulter:', requestData);
+            const response = await fetch(API_ENDPOINT, {
+                method: 'POST',
+                credentials: 'same-origin',
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(requestData)
+            });
+
+            const responseData = await response.json();
+            console.log('Add response:', responseData);
+
+            if (responseData.status === "success") {
+                alert(responseData.message || 'Added successfully');
+                addForm.style.display = "none";
+                document.getElementById("form-add").reset();
+                loadDefaulters();
+            } else {
+                alert(responseData.message || 'Add failed: ' + (responseData.message || 'Unknown error'));
+            }
+        } catch (err) {
+            console.error('Add error:', err);
+            alert("Server error during add");
+        }
+    });
+
+    // Table click handlers for edit and delete
+    tableBody.addEventListener("click", async (e) => {
+        if (!isCommittee) return;
+
+            // Handle Delete
+        if (e.target.classList.contains("delete-btn")) {
+            const flatNumber = e.target.dataset.flat;
+            if (!flatNumber) {
+                console.error('No flat number found for delete button');
+                return;
+            }
+
+            if (!confirm("Are you sure you want to delete this defaulter?")) return;
+
+            try {
+                console.log('Deleting defaulter:', flatNumber);
+                const response = await fetch(`${API_ENDPOINT}/${flatNumber}`, {
+                    method: "DELETE",
+                    credentials: 'same-origin'
+                });                const data = await response.json();
+                console.log('Delete response:', data);
+
+                if (data.status === "success") {
+                    alert(data.message || 'Deleted successfully');
+                    loadDefaulters();
+                } else {
+                    alert(data.message || 'Delete failed');
+                }
+            } catch (err) {
+                console.error('Delete error:', err);
+                alert("Server error during delete");
+            }
+        }
+
+        // Handle Edit
+        if (e.target.classList.contains("edit-btn")) {
+            const flatNumber = e.target.dataset.flat;
+            if (!flatNumber) {
+                console.error('No flat number found for edit button');
+                return;
+            }
+            const row = e.target.closest("tr");
+            const [nameCell, flatCell, amountCell] = row.children;
+            
+            document.getElementById("residentName").value = nameCell.textContent.trim();
+            document.getElementById("flatNumber").value = flatCell.textContent.trim();
+            document.getElementById("originalFlatNumber").value = flatCell.textContent.trim();
+            document.getElementById("unpaidAmount").value = amountCell.textContent
+                .replace("₹", "")
+                .replace(/,/g, "")
+                .trim();
+            
+            updateForm.style.display = "block";
+            addForm.style.display = "none";
+        }
+    });
+});
+  </script>
+</body>
+</html>

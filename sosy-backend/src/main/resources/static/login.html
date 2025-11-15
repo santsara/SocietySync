@@ -1,0 +1,327 @@
+<!DOCTYPE html> 
+<html lang="en"> 
+<head> 
+    <meta charset="UTF-8"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <title>Society Sync - Login</title> 
+    <link rel="stylesheet" href="style.css"> 
+</head>
+<style>
+ /* General Reset */ 
+ *
+{
+    margin: 0; 
+    padding: 0; 
+    box-sizing: border-box; 
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+} 
+
+/* Background */ 
+body
+{
+    background: linear-gradient(135deg, #FFF0D3, #FFF9EE); /* updated colors */ 
+    height: 100vh; 
+    background-attachment: fixed;
+    display: flex; 
+    justify-content: center; 
+    padding-top: 50;
+    padding-bottom: 50px;
+    box-sizing: border-box; 
+}
+
+/* Container */ 
+.login-container
+{
+    width: 100%; 
+    max-width: 450px; 
+    padding: 20px; 
+}
+
+/* Form Box */ 
+.form-box
+{ 
+    background: #FFF9EE; /* updated background */ 
+    padding: 30px; 
+    border-radius: 20px; 
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); 
+    text-align: center; 
+} 
+
+/* Title & Subtitle */ 
+.title
+{ 
+    font-size: 26px; 
+    font-weight: bold; 
+    color: #4d2822; 
+    margin-bottom: 5px; 
+} 
+
+.subtitle
+{ 
+    font-size: 14px; 
+    color: #4d2822; 
+    margin-bottom: 20px; 
+} 
+
+/* Input Fields */ 
+.input-group
+{ 
+    text-align: left; 
+    margin-bottom: 15px; 
+}
+
+.input-group label
+{ 
+    font-size: 14px; 
+    color: #4d2822; 
+    margin-bottom: 5px; 
+    display: block; 
+} 
+
+.input-group input, .input-group textarea
+{ 
+    width: 100%; 
+    padding: 10px; 
+    border: 1px solid #ccc; 
+    border-radius: 12px; 
+    font-size: 14px; 
+    transition: border-color 0.3s ease, box-shadow 0.3s ease; 
+} 
+
+.input-group input:focus, .input-group textarea:focus
+{ 
+    border-color: #a05252; 
+    box-shadow: 0 0 5px rgba(160, 82, 82, 0.3); 
+    outline: none; 
+} 
+
+/* Button */ 
+.btn
+{
+    margin-top: 25px; 
+    width: 100%; 
+    padding: 12px; 
+    background: #4d2822; 
+    color: #FFF0D3; 
+    border: none; 
+    border-radius: 25px; 
+    font-size: 16px; 
+    cursor: pointer; 
+    transition: background 0.3s ease; 
+} 
+
+.btn:hover 
+{ 
+    background: #8b3a3a; 
+} 
+
+/* Login Text */ 
+.login-text 
+{ 
+    margin-top: 15px; 
+    font-size: 14px; 
+} 
+
+.login-text a
+{ 
+    color: #a05252; 
+    text-decoration: none; 
+} 
+
+.login-text a:hover
+{ 
+    text-decoration: underline; 
+} 
+
+/* Responsive */ 
+@media (max-width: 480px)
+{ 
+    .form-box 
+    { 
+        padding: 20px; 
+    } 
+}
+
+a, a:visited, a:hover, a:active
+{
+    text-decoration: none;
+}
+</style> 
+<body> 
+    <div class="login-container"> 
+        <div class="form-box"> 
+            <h1 class="title">Society Sync</h1> 
+            <p class="subtitle">Society Fund Tracking & Management</p> 
+            <h2 class="title">Login</h2>
+            <form id="login-form">
+                <div class="input-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" placeholder="Enter your Flat Number as username" required>
+                </div>
+                <div class="input-group" style="position: relative;">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                </div>
+                <div class="input-group">
+                    <div id="committee-link" style="margin-top: 10px;">
+                        <span>Committee Member?
+                            <button type="button" onclick="showCommitteeBox()" style="background:none;border:none;color:#4d2822;text-decoration:bold;cursor:pointer;padding:0;"><b>Click Here</b></button>
+                        </span>
+                    </div>
+                    <div id="committee-box" style="display: none; margin-top: 10px;">
+                        <label for="committee-id">Committee Member ID</label>
+                        <input type="text" id="committee-id" placeholder="Enter your Committee Member ID" />
+                    </div>
+                </div>
+            <button type="submit" class="btn">Take Me Home!</button>
+            </form>
+            <div class="login-text" style="text-align:center; margin-top:18px;">
+                New to the community? <a href="signup.html"><b>Sign Up!</b></a>
+            </div>
+        </p>
+    </div>
+    </div>
+    <script>
+console.log("login page loaded");
+
+document.addEventListener("DOMContentLoaded", function() {
+    var committeeBtn = document.querySelector('#committee-link button');
+    if (committeeBtn) {
+        committeeBtn.style.marginTop = "40px";
+        committeeBtn.addEventListener('click', function() {
+            document.getElementById('committee-box').style.display = 'block';
+            document.getElementById('committee-link').style.display = 'none';
+                // If user already typed their flat/username, prefill the committee ID to reduce mistakes
+                var usernameVal = document.getElementById('username').value.trim();
+                if (usernameVal) {
+                    document.getElementById('committee-id').value = usernameVal;
+                }
+                document.getElementById('committee-id').focus();
+        });
+    }
+
+    const form = document.getElementById("login-form");
+    const userInput = document.getElementById("username");
+    const passInput = document.getElementById("password");
+
+    const togglePassBtn = document.createElement("button");
+    togglePassBtn.type = "button";
+    togglePassBtn.textContent = "Show";
+    togglePassBtn.style.marginTop = "8px";
+    togglePassBtn.style.position = "absolute";
+    togglePassBtn.style.top = "50%";
+    togglePassBtn.style.right = "10px";
+    togglePassBtn.style.transform = "translateY(95%)";
+    togglePassBtn.style.marginBottom = "15px";
+    togglePassBtn.style.padding = "6px 14px";
+    togglePassBtn.style.borderRadius = "8px";
+    togglePassBtn.style.background = "#4D2822";
+    togglePassBtn.style.color = "#FFF9EE";
+    togglePassBtn.style.border = "1px solid #FFF0D3";
+    togglePassBtn.style.cursor = "pointer";
+    togglePassBtn.disabled = true;
+
+    passInput.parentNode.style.position = "relative";
+    passInput.parentNode.appendChild(togglePassBtn);
+
+    passInput.addEventListener("input", function() {
+        togglePassBtn.disabled = this.value.length === 0;
+        if (this.type === "text") {
+            this.type = "password";
+            togglePassBtn.textContent = "Show";
+        }
+    });
+
+    togglePassBtn.addEventListener("click", function() {
+        if (passInput.type === "password") {
+            passInput.type = "text";
+            togglePassBtn.textContent = "Hide";
+        } else {
+            passInput.type = "password";
+            togglePassBtn.textContent = "Show";
+        }
+    });
+
+    form.addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    const username = userInput.value.trim();
+    const password = passInput.value;
+    const committeeId = document.getElementById("committee-id").value.trim();
+
+    let errorMessages = document.querySelectorAll(".error-message");
+    errorMessages.forEach(msg => msg.remove());
+
+    let isValid = true;
+    if (!username) {
+        showError(userInput, "Please enter your username.");
+        isValid = false;
+    }
+    if (!password) {
+        showError(passInput, "Please enter your password.");
+        isValid = false;
+    } else if (password.length < 4) {
+        showError(passInput, "Password should be at least 4 characters.");
+        isValid = false;
+    }
+
+    if (isValid) {
+        // If committee box is visible, require committee ID client-side and show helpful message
+        var committeeBox = document.getElementById('committee-box');
+        var committeeBoxVisible = window.getComputedStyle(committeeBox).display !== 'none';
+        var committeeIdInput = document.getElementById('committee-id');
+        var committeeIdValue = committeeIdInput.value.trim();
+        if (committeeBoxVisible && !committeeIdValue) {
+            showError(committeeIdInput, "Please enter your Committee ID (your flat number) to login as a committee member.");
+            return;
+        }
+
+        fetch("/api/signup/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                flat: username,
+                password: password,
+                committeeId: committeeId
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            console.log("Login response:", data); // 🧪 Debug log
+
+            if (data.status === "success") {
+                window.location.href = "/homepage.html";
+            } else {
+                // If the server indicates committee ID is required, show inline guidance
+                if (data.message && data.message.toLowerCase().includes('committee id')) {
+                    // Reveal the committee box so the user can enter it
+                    document.getElementById('committee-box').style.display = 'block';
+                    document.getElementById('committee-link').style.display = 'none';
+                    document.getElementById('committee-id').focus();
+                    showError(document.getElementById('committee-id'), data.message);
+                } else {
+                    alert(data.message || "Login failed. Please try again.");
+                }
+            }
+        })
+        .catch(err => {
+            console.error("Login error:", err);
+            alert("Something went wrong during login.");
+        });
+    }
+});
+
+    function showError(inputElement, message) {
+        const error = document.createElement("div");
+        error.className = "error-message";
+        error.style.color = "red";
+        error.style.fontSize = "12px";
+        error.style.marginTop = "4px";
+        error.textContent = message;
+        inputElement.parentNode.appendChild(error);
+        inputElement.focus();
+    }
+});
+</script>
+</body>
+</html>

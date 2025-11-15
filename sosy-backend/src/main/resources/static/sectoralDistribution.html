@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>SocietySync - Sectoral Distribution</title>
+    <style>
+        /* Banner */ 
+        .banner
+        { 
+            background-color: #4d2822; 
+            color: #FFF9EE; 
+            padding: 20px; 
+            text-align: center; 
+            position: relative; 
+            width: 100%;
+            box-sizing: border-box;
+            margin-bottom: 50px;
+        } 
+
+        .banner-icon
+        { 
+            position: absolute; 
+            left: 20px; 
+            top: 50%; 
+            transform: translateY(-50%); 
+            width: 75px; 
+            height: 75px; 
+        }
+         
+        .banner-title
+        { 
+            font-size: 28px; 
+            font-weight: bold; 
+        } 
+        body
+        {
+            width: 100%;
+            background: linear-gradient(135deg, #FFF0D3, #FFF9EE);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0px;
+            padding: 0px;
+        }
+         
+        .banner h1
+        {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .banner p
+        {
+            font-size: 16px;
+            color: #f0e0e0;
+        }
+
+        /* Table Container */
+        .table-container
+        {
+            background: #FFF9EE;
+            margin: 0 20px 40px 20px;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 900px;
+        }
+
+        table
+        {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td
+        {
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+            font-size: 16px;
+        }
+
+        th 
+        {
+            background-color: #FFF0D3;
+            color: #4d2822;
+        }
+
+        td.amount
+        {
+            text-align: right;
+            font-weight: bold;
+            color: #444;
+        }
+
+        tr.total-row td
+        {
+            font-weight: bold;
+            background-color: #FFF0D3;
+            color: #4d2822;
+        }
+        
+        /* Edit Form Styles */
+        #editFormContainer { 
+            display: none; 
+            margin-bottom: 40px; 
+            max-width: 900px; 
+            width: 100%; 
+        }
+        #sectorEditForm { 
+            background: #fff9ee; 
+            padding: 20px; 
+            border-radius: 15px; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1); 
+        }
+        #sectorEditForm h3 { 
+            margin-bottom: 15px; 
+            color: #4d2822; 
+        }
+        #sectorEditForm label { 
+            font-weight: bold; 
+            display: block; 
+            margin-top: 10px; 
+        }
+        #sectorEditForm input { 
+            width: 100%; 
+            padding: 8px; 
+            margin-top: 5px; 
+            margin-bottom: 10px; 
+            border: 1px solid #ccc; 
+            border-radius: 5px; 
+        }
+        
+        /* PRIMARY BUTTON STYLE (Submit) */
+        #sectorEditForm button[type="submit"] { 
+            background-color: #4d2822; 
+            color: #fff9ee; 
+            padding: 10px 20px; 
+            border: none; 
+            border-radius: 5px; 
+            cursor: pointer; 
+            margin-top: 15px; 
+        }
+        
+        /* SECONDARY BUTTON STYLE (Cancel) - FIXED */
+        #sectorEditForm button[type="button"] { 
+            background-color: #4d2822; /* Dark background */
+            color: #fff9ee; /* Light text */
+            padding: 10px 20px; 
+            border: 1px solid #4d2822; /* Dark border */
+            border-radius: 5px; 
+            cursor: pointer; 
+            margin-top: 15px; 
+            margin-left: 10px; 
+        }
+        
+        /* Style for the action buttons */
+        .edit-btn, .action-btn { 
+            background-color: #8b3a3a; 
+            color: #fff9ee; 
+            padding: 8px 15px;
+            border: none; 
+            border-radius: 5px; 
+            cursor: pointer; 
+            font-size: 16px; 
+            font-weight: bold;
+            margin: 5px 0;
+        }
+        .action-btn {
+            margin-bottom: 20px;
+        }
+        .edit-btn {
+            padding: 6px 10px;
+            font-size: 14px;
+        }
+        /* Responsive */
+        @media (max-width: 480px)
+        {
+            .banner h1
+            {
+                font-size: 26px;
+            }
+            th, td
+            {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="banner"> 
+        <img src="Images\Home.png" alt="Go Home Icon" class="banner-icon" /> 
+        <h1 class="banner-title">Sectoral Distribution</h1> 
+        <a href="homepage.html">
+            <img src="Images\Home.png" alt="Go Home Icon" style="position: absolute; left: 20px; top: 50%; transform: translateY(-50%); width: 75px; height: 75px;">
+        </a>
+    </header> 
+    
+    <div id="committeeActions" style="display: none; width: 100%; max-width: 900px; margin-top: 20px;">
+        <button id="addNewSectorBtn" class="action-btn">➕ Add New Sector</button>
+    </div>
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Sector</th>
+                    <th class="amount" style="text-align: right;">Allocated Funds (₹)</th>
+                    <th id="actionHeader" style="display:none;">Actions</th> 
+                </tr>
+            </thead>
+            <tbody id="sectoralTableBody">
+                </tbody>
+            <tfoot>
+                <tr class="total-row">
+                    <td>Total Allocated</td>
+                    <td class="amount" id="totalAllocatedAmount">₹0</td> 
+                    <td id="totalActionCell" style="display:none;"></td> 
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+
+    <div id="editFormContainer">
+        <form id="sectorEditForm">
+            <h3 id="formTitle">Add New Sector Budget</h3>
+
+            <input type="hidden" id="sectorId" name="id" value=""> 
+
+            <label for="sectorNameInput">Sector Name:</label>
+            <input type="text" id="sectorNameInput" name="sectorName" required>
+
+            <label for="allocatedFundsInput">Allocated Funds (₹):</label>
+            <input type="number" id="allocatedFundsInput" name="allocatedFunds" required>
+
+            <button type="submit">Submit</button>
+            <button type="button" onclick="hideForm()">Cancel</button>
+        </form>
+    </div>
+
+    <script>
+        // Global storage for fetched data and committee status
+        window.sectoralData = [];
+        window.isCommittee = false;
+        
+        const formContainer = document.getElementById('editFormContainer');
+        const formTitle = document.getElementById('formTitle');
+        const sectorForm = document.getElementById('sectorEditForm');
+        const addNewSectorBtn = document.getElementById('addNewSectorBtn');
+        const committeeActions = document.getElementById('committeeActions');
+
+
+        // Function to show and scroll to the form
+        function showForm() {
+            formContainer.style.display = 'block';
+            formContainer.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Function to hide the form
+        function hideForm() {
+            formContainer.style.display = 'none';
+        }
+
+        // Function to prepare the form for a NEW record
+        function prepareForAdd() {
+            sectorForm.reset();
+            document.getElementById('sectorId').value = '';
+            formTitle.textContent = 'Add New Sector Budget';
+            showForm();
+        }
+
+        // Function to prepare the form for an UPDATE record
+        function handleEdit(id) {
+            const sector = window.sectoralData.find(s => s.id === id);
+            
+            if (!sector) {
+                alert("Error: Sector data not found.");
+                return;
+            }
+
+            // Set the hidden ID field (THIS IS THE KEY FOR UPDATING)
+            document.getElementById('sectorId').value = sector.id; 
+            
+            // Populate fields
+            document.getElementById('sectorNameInput').value = sector.sectorName;
+            document.getElementById('allocatedFundsInput').value = sector.allocatedFunds;
+            formTitle.textContent = 'Update Sector Budget: ' + sector.sectorName;
+
+            showForm();
+        }
+
+
+        // --- MAIN FETCH AND INITIALIZATION ---
+
+        fetch("/api/sectoral-distribution")
+            .then(res => res.json())
+            .then(data => {
+                if (data.status !== "success") {
+                    alert(data.message || "Failed to load sectoral data.");
+                    return;
+                }
+
+                window.sectoralData = data.data || [];
+                window.isCommittee = data.isCommittee;
+                
+                const distributions = window.sectoralData;
+                const tbody = document.getElementById("sectoralTableBody");
+                const totalAmountCell = document.getElementById("totalAllocatedAmount");
+                
+                let totalAllocated = 0;
+
+                tbody.innerHTML = ''; 
+
+                // Show/Hide committee-only elements
+                if (window.isCommittee) {
+                    document.getElementById("actionHeader").style.display = "table-cell";
+                    document.getElementById("totalActionCell").style.display = "table-cell";
+                    committeeActions.style.display = "block";
+                    
+                    // Attach listener to the new Add button
+                    addNewSectorBtn.addEventListener('click', prepareForAdd);
+                }
+
+                distributions.forEach(d => {
+                    totalAllocated += d.allocatedFunds;
+
+                    const row = document.createElement("tr");
+                    
+                    // Add the edit button only if the user is a committee member
+                    let actionCell = window.isCommittee 
+                        ? `<td><button class="edit-btn" onclick="handleEdit(${d.id})">Edit</button></td>` 
+                        : '';
+
+                    row.innerHTML = `
+                        <td>${d.sectorName}</td>
+                        <td class="amount">₹${d.allocatedFunds.toLocaleString()}</td>
+                        ${actionCell}
+                    `;
+                    tbody.appendChild(row);
+                });
+
+                // Update Total Row
+                totalAmountCell.textContent = `₹${totalAllocated.toLocaleString()}`;
+
+            })
+            .catch(err => {
+                console.error("Sectoral fetch failed:", err);
+                alert("Server error while loading sectoral data.");
+            });
+
+
+        // --- FORM SUBMISSION HANDLER ---
+
+        sectorForm.addEventListener("submit", function(e) {
+            e.preventDefault();
+
+            if (!window.isCommittee) {
+                alert("Access denied. You do not have permission to modify data.");
+                return;
+            }
+
+            // Get the ID from the hidden field
+            const sectorIdValue = document.getElementById('sectorId').value;
+            
+            // CRITICAL FIX: Safely determine the ID. If sectorIdValue is "" (for new), idToSend is null.
+            const idToSend = (sectorIdValue && !isNaN(parseInt(sectorIdValue))) ? parseInt(sectorIdValue) : null;
+            
+            // Gather form data
+            const payload = {
+                id: idToSend, // Crucial for backend UPDATE/CREATE decision
+                sectorName: document.getElementById('sectorNameInput').value.trim(),
+                allocatedFunds: parseFloat(document.getElementById('allocatedFundsInput').value)
+            };
+
+            fetch("/api/sectoral-distribution", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            })
+            .then(res => res.json())
+            .then(data => {
+                alert(data.message || "Operation completed.");
+                if (data.status === "success") {
+                    location.reload(); // Refresh the page
+                }
+            })
+            .catch(err => {
+                console.error("Sectoral update failed:", err);
+                alert("Server error while updating sector.");
+            });
+        });
+    </script>
+</body>
+</html>

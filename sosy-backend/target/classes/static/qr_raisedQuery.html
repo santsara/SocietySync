@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>QuickResolve - Raised Queries</title>
+    <style>
+        /* ... (CSS remains unchanged) ... */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background: linear-gradient(135deg, #FFF0D3, #FFF9EE); padding-bottom: 50px; }
+        .banner { background-color: #4d2822; color: #FFF9EE; padding: 20px; text-align: center; position: relative; width: 100%; box-sizing: border-box; margin-bottom: 0px; }
+        .banner h1 { font-size: 32px; margin-bottom: 10px; }
+        .banner p { font-size: 16px; color: #FFF9EE; }
+        .back-icon { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); width: 75px; height: 75px; }
+        
+        .query-list-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+        .query-card {
+            background: #FFF9EE;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+            width: 100%;
+            max-width: 600px;
+            position: relative;
+        }
+        .query-card h3 {
+            font-size: 20px;
+            color: #4d2822;
+            margin-bottom: 10px;
+        }
+        .query-card p {
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 10px;
+        }
+        .query-info {
+            font-size: 12px;
+            color: #888;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+        .query-details {
+            background: #fdf6e6;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #a05252;
+        }
+        .resolve-btn {
+            margin-top: 15px;
+            padding: 10px 20px;
+            background: #4CAF50; /* Green for resolve */
+            color: white;
+            border: none;
+            border-radius: 20px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        .resolve-btn:hover {
+            background: #45a049;
+        }
+        .loader, .error-message {
+            text-align: center;
+            padding: 50px;
+            font-size: 16px;
+            color: #4d2822;
+        }
+        .error-message {
+            color: #8b3a3a;
+            font-weight: bold;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 100;
+            left: 0; top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 30px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 400px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            position: relative;
+        }
+        .close-btn {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close-btn:hover,
+        .close-btn:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .modal-content textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            resize: vertical;
+        }
+        .modal-content button {
+            width: 100%;
+            padding: 10px;
+            background: #4d2822;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+        .modal-content button:hover {
+            background: #8b3a3a;
+        }
+    </style>
+</head>
+<body>
+    <header class="banner">
+        <h1>Quick Resolve </h1>
+        <p>Already Raised Queries (Waiting for Resolution)</p>
+        <a href="quickResolve.html">
+            <img src="Images/Back to qR.png" alt="Back to Quick Resolve" class="back-icon">
+        </a>
+    </header>
+
+    <div class="query-list-container" id="queryList">
+        <div class="loader" id="loader">Loading queries...</div>
+        <div class="error-message" id="errorMessage" style="display: none;"></div>
+    </div>
+    
+    <div id="resolveModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2>Provide Resolution</h2>
+            <p id="modalQueryTitle" style="font-weight: bold;"></p>
+            <p id="modalQueryDetails" style="font-style: italic; font-size: 14px;"></p>
+            <textarea id="resolutionText" placeholder="Type the resolution details here..." rows="4" required></textarea>
+            <button id="submitResolutionBtn">Submit Resolution</button>
+            <div id="resolutionMessage" style="margin-top: 10px; text-align: center; font-weight: bold;"></div>
+        </div>
+    </div>
+    
+    <script defer>
+        const queryList = document.getElementById('queryList');
+        const loader = document.getElementById('loader');
+        const errorMessage = document.getElementById('errorMessage');
+        const modal = document.getElementById('resolveModal');
+        const closeBtn = document.querySelector('.close-btn');
+        const submitResolutionBtn = document.getElementById('submitResolutionBtn');
+        const resolutionText = document.getElementById('resolutionText');
+        const resolutionMessage = document.getElementById('resolutionMessage');
+        const modalQueryTitle = document.getElementById('modalQueryTitle');
+        const modalQueryDetails = document.getElementById('modalQueryDetails');
+        
+        let isCommitteeMember = false;
+        let currentQueryId = null;
+
+        document.addEventListener('DOMContentLoaded', initialize);
+
+        // Function to fetch committee status
+        async function fetchSessionData() {
+            try {
+                // FIX: Corrected endpoint to match QueryController's /session mapping
+                const response = await fetch('/api/quickresolve/session'); 
+                if (response.ok) {
+                    const sessionData = await response.json();
+                    // Assumes the controller now maps 'is_committee' to 'isCommittee'
+                    isCommitteeMember = sessionData.isCommittee || false; 
+                } else {
+                    console.warn("Could not fetch session data. Assuming non-committee member. Status:", response.status);
+                    isCommitteeMember = false;
+                }
+            } catch (err) {
+                console.error("Network error fetching session data:", err);
+                isCommitteeMember = false;
+            }
+        }
+
+        async function initialize() {
+            // Wait for committee status before loading queries
+            await fetchSessionData(); 
+            loadQueries();
+        }
+
+        async function loadQueries() {
+            loader.style.display = 'block';
+            errorMessage.style.display = 'none';
+            queryList.innerHTML = ''; // Clear content, leaving only loader and error container
+
+            try {
+                const res = await fetch("/api/quickresolve/raised");
+                
+                if (res.ok) {
+                    const queries = await res.json();
+                    
+                    if (queries.length === 0) {
+                        queryList.innerHTML = '<p class="loader">No raised queries currently awaiting resolution.</p>';
+                    } else {
+                        queries.forEach(query => {
+                            queryList.appendChild(createQueryCard(query));
+                        });
+                    }
+                } else {
+                    // Handle server errors
+                    let errorText = `Failed to load queries. Status: ${res.status}`;
+                    
+                    try {
+                        const data = await res.json();
+                        if (data.message) {
+                            errorText = data.message;
+                        }
+                    } catch (e) {
+                        console.warn("Could not parse error message JSON:", e);
+                    }
+
+                    errorMessage.textContent = '❌ Error loading queries: ' + errorText;
+                    errorMessage.style.display = 'block';
+                }
+            } catch (err) {
+                console.error("Query loading failed (Network Error):", err);
+                errorMessage.textContent = '❌ Error loading queries. Check the server connection.';
+                errorMessage.style.display = 'block';
+            } finally {
+                loader.style.display = 'none';
+            }
+        }
+
+        function createQueryCard(query) {
+            const card = document.createElement('div');
+            card.className = 'query-card';
+
+            // Check if dateRaised is valid before formatting
+            const date = new Date(query.dateRaised);
+            const formattedDate = date instanceof Date && !isNaN(date) ? date.toLocaleString('en-IN', {
+                day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true
+            }) : 'Date N/A';
+
+            card.innerHTML = `
+                <h3>${query.title} (ID: ${query.id})</h3>
+                <div class="query-info">
+                    Raised by: <strong>${query.residentName || 'N/A'}</strong> | Flat: <strong>${query.residentFlatNo || 'N/A'}</strong> | ${formattedDate}
+                </div>
+                <div class="query-details">
+                    <p>${query.description}</p>
+                </div>
+            `;
+
+            // Access control logic: Only display the Resolve button for committee members
+            if (isCommitteeMember) {
+                const resolveBtn = document.createElement('button');
+                resolveBtn.className = 'resolve-btn';
+                resolveBtn.textContent = 'Resolve Query';
+                resolveBtn.onclick = () => openModal(query);
+                card.appendChild(resolveBtn);
+            }
+
+            return card;
+        }
+
+        function openModal(query) {
+            currentQueryId = query.id;
+            modalQueryTitle.textContent = `Title: ${query.title}`;
+            modalQueryDetails.textContent = `Raised by: ${query.residentName} (${query.residentFlatNo})`;
+            resolutionText.value = ''; 
+            resolutionMessage.textContent = ''; 
+            modal.style.display = 'block';
+        }
+
+        closeBtn.onclick = () => modal.style.display = 'none';
+        window.onclick = (event) => {
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        };
+
+        submitResolutionBtn.addEventListener('click', async () => {
+            const answer = resolutionText.value.trim();
+            if (!answer) {
+                resolutionMessage.textContent = 'Resolution cannot be empty.';
+                resolutionMessage.style.color = '#8b3a3a';
+                return;
+            }
+
+            resolutionMessage.textContent = 'Submitting...';
+            resolutionMessage.style.color = '#444';
+            submitResolutionBtn.disabled = true;
+
+            const payload = {
+                queryId: currentQueryId,
+                committeeAnswer: answer
+            };
+
+            try {
+                // Endpoint /api/quickresolve/answer processes the resolution
+                const res = await fetch("/api/quickresolve/answer", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(payload)
+                });
+                
+                const data = await res.json();
+                
+                if (res.ok && data.status === "success") {
+                    resolutionMessage.textContent = '✅ ' + data.message;
+                    resolutionMessage.style.color = '#2E8B57';
+                    
+                    setTimeout(() => {
+                        modal.style.display = 'none';
+                        // Redirects to solved queries page upon successful resolution
+                        window.location.href = 'qr_solvedQuery.html';
+                    }, 1500);
+                } else {
+                    resolutionMessage.textContent = '❌ Error: ' + (data.message || 'Failed to submit resolution.');
+                    resolutionMessage.style.color = '#8b3a3a';
+                }
+            } catch (err) {
+                console.error("Resolution submission failed:", err);
+                resolutionMessage.textContent = '❌ Network error. Check server status.';
+                resolutionMessage.style.color = '#8b3a3a';
+            } finally {
+                submitResolutionBtn.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>

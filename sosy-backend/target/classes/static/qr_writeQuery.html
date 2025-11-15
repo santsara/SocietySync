@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>QuickResolve - Write Query</title>
+    <style>
+        /* ... (CSS remains unchanged) ... */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background: linear-gradient(135deg, #FFF0D3, #FFF9EE); padding-bottom: 50px; }
+        .banner { background-color: #4d2822; color: #FFF9EE; padding: 20px; text-align: center; position: relative; width: 100%; box-sizing: border-box; margin-bottom: 0px; }
+        .banner h1 { font-size: 32px; margin-bottom: 10px; }
+        .banner p { font-size: 16px; color: #FFF9EE; }
+        .back-icon { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); width: 75px; height: 75px; }
+        .chatbox-container { display: flex; justify-content: center; align-items: flex-start; padding: 40px 20px; min-height: calc(100vh - 120px); }
+        .chatbox { background: #FFF9EE; padding: 30px; border-radius: 20px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); width: 100%; max-width: 500px; }
+        
+        /* The specific block that caused errors, now clean: */
+        .chatbox label { font-size: 16px; color: #444; margin-top: 15px; margin-bottom: 5px; display: block; font-weight: bold; }
+        .chatbox input[type="text"] { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 12px; font-size: 14px; margin-bottom: 15px;}
+        .chatbox textarea { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 12px; font-size: 14px; resize: vertical; transition: border-color 0.3s ease, box-shadow 0.3s ease; }
+        .chatbox input:focus, .chatbox textarea:focus { border-color: #a05252; box-shadow: 0 0 5px rgba(160, 82, 82, 0.3); outline: none; }
+        .btn { margin-top: 20px; width: 100%; padding: 12px; background: #4d2822; color: white; border: none; border-radius: 25px; font-size: 16px; cursor: pointer; transition: background 0.3s ease; }
+        .btn:hover { background: #8b3a3a; }
+        #messageArea { margin-top: 15px; font-weight: bold; text-align: center; }
+        @media (max-width: 480px) { .chatbox { padding: 20px; } .banner h1 { font-size: 26px; } .banner p { font-size: 14px; } }
+    </style>
+</head>
+<body>
+    <header class="banner">
+        <h1>Quick Resolve </h1>
+        <p>Raise your query</p>
+        <a href="quickResolve.html">
+            <img src="Images/Back to qR.png" alt="Back to Quick Resolve" class="back-icon">
+        </a>
+    </header>
+
+    <div class="chatbox-container">
+        <form id="queryForm" class="chatbox">
+            <label for="queryTitle">Query Title (Summary)</label>
+            <input type="text" id="queryTitle" name="queryTitle" placeholder="e.g., Water Leakage in flat" maxlength="255" required />
+
+            <label for="queryDescription">Query Details</label>
+            <textarea id="queryDescription" name="queryDescription" placeholder="Type your issue or concern here in detail..." rows="6" required></textarea>
+            
+            <button type="submit" class="btn">Submit Query</button>
+            <div id="messageArea"></div>
+        </form>
+    </div>
+    
+    <script defer>
+        const queryForm = document.getElementById('queryForm');
+        const messageArea = document.getElementById('messageArea');
+
+        queryForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            messageArea.textContent = 'Submitting...';
+            messageArea.style.color = '#444';
+
+            const payload = {
+                title: document.getElementById('queryTitle').value.trim(),
+                description: document.getElementById('queryDescription').value.trim(),
+                // residentName and residentFlatNo are intentionally omitted; server gets them from the session.
+            };
+            
+            if (!payload.title || !payload.description) {
+                messageArea.textContent = '❌ Title and description are required.';
+                messageArea.style.color = '#8b3a3a';
+                return;
+            }
+
+            try {
+                // Endpoint /api/quickresolve/write posts the new query
+                const res = await fetch("/api/quickresolve/write", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(payload)
+                });
+                
+                const data = await res.json(); 
+                
+                if (res.ok && data.status === "success") {
+                    messageArea.textContent = '✅ ' + data.message;
+                    messageArea.style.color = '#2E8B57';
+                    queryForm.reset();
+                    // Redirect to the raised queries list to show the result
+                    setTimeout(() => window.location.href = 'qr_raisedQuery.html', 2000);
+                } else {
+                    // Handle server-side errors (e.g., session invalid)
+                    messageArea.textContent = '❌ Error: ' + (data.message || 'Failed to submit query. Check server logs.');
+                    messageArea.style.color = '#8b3a3a';
+                }
+            } catch (err) {
+                console.error("Query submission failed:", err);
+                messageArea.textContent = '❌ Network or server connection error. Please try again.';
+                messageArea.style.color = '#8b3a3a';
+            }
+        });
+    </script>
+</body>
+</html>

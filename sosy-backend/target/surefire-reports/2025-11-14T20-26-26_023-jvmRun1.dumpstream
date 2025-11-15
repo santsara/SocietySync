@@ -1,0 +1,10 @@
+# Created at 2025-11-14T20:26:26.615
+Corrupted STDOUT by directly writing to native stream in forked JVM 1. Stream '[0.025s][warning][cds] The shared archive file was created by a different version or build of HotSpot'.
+java.lang.IllegalArgumentException: Stream stdin corrupted. Expected comma after third character in command '[0.025s][warning][cds] The shared archive file was created by a different version or build of HotSpot'.
+	at org.apache.maven.plugin.surefire.booterclient.output.ForkClient$OperationalData.<init>(ForkClient.java:507)
+	at org.apache.maven.plugin.surefire.booterclient.output.ForkClient.processLine(ForkClient.java:210)
+	at org.apache.maven.plugin.surefire.booterclient.output.ForkClient.consumeLine(ForkClient.java:177)
+	at org.apache.maven.plugin.surefire.booterclient.output.ThreadedStreamConsumer$Pumper.run(ThreadedStreamConsumer.java:88)
+	at java.base/java.lang.Thread.run(Thread.java:1474)
+
+
